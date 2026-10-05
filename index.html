@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PANORAMA — полив, который понимает участок · инвестпроект</title>
+<meta name="description" content="PANORAMA — система автоматизированного полива для жилых и коммерческих ландшафтов: датчики, локальный контроллер и шкаф на 16 зон. Раунд 1 млн ₽ на 12 месяцев: два опытных шкафа и 2–3 платных пилота.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="PANORAMA — система полива, которая понимает состояние участка">
+<meta property="og:description" content="Инвестиционный проект: шкаф на 16 зон, датчики и локальная защита. Раунд 1 млн ₽ — два опытных шкафа и 2–3 платных пилота за 12 месяцев.">
+<meta property="og:image" content="https://andrei-khitrov.github.io/panorama/assets/img/og.jpg">
+<meta property="og:url" content="https://andrei-khitrov.github.io/panorama/">
+<link rel="canonical" href="https://andrei-khitrov.github.io/panorama/">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#d9e8f1">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/img/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<script>
+(function (h) {
+  h.classList.add('js', 'is-loading');
+  /* загрузочный экран всегда начинает с первого экрана: браузер не восстанавливает прокрутку посреди страницы
+     (ссылка на раздел — #contact и т. п. — ведёт туда после загрузки) */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (!location.hash) window.scrollTo(0, 0);
+  setTimeout(function () {
+    if (!h.classList.contains('is-ready') && !(window.site && window.site.booted)) h.classList.add('is-static');
+  }, 4000);
+})(document.documentElement);
+</script>
+<link rel="preload" href="assets/fonts/unica-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/unica-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/lenis.css">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/sections.css">
+<script defer src="assets/js/vendor/gsap.min.js"></script>
+<script defer src="assets/js/vendor/ScrollTrigger.min.js"></script>
+<script defer src="assets/js/vendor/lenis.min.js"></script>
+<script defer src="assets/js/core.js"></script>
+<script defer src="assets/js/main.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+
+<!-- Загрузочный экран (паспорт 00 · vectrfl.com #loader): знак поворачивается из −60°, вокруг включаются
+     16 зон шкафа, два пунктирных эллипса прорисовываются маской, пунктир бежит — вода по кольцу.
+     Уходит, когда 3D-макет нарисовал первый кадр; без JS не показывается -->
+<div class="loader" aria-hidden="true">
+  <div class="loader__bg"></div>
+  <svg class="loader__ellipse loader__ellipse--outer" viewBox="0 0 1500 800"><defs><mask id="ld-mask-outer"><path class="loader__draw loader__draw--outer" d="M 750 1 A 749 399 0 0 1 750 799 A 749 399 0 0 1 750 1" fill="none" stroke="white" stroke-width="4" pathLength="3700"/></mask></defs><ellipse cx="750" cy="400" rx="749" ry="399" mask="url(#ld-mask-outer)"/></svg>
+  <svg class="loader__ellipse loader__ellipse--inner" viewBox="0 0 800 800"><defs><mask id="ld-mask-inner"><path class="loader__draw loader__draw--inner" d="M 400 1 A 399 399 0 0 1 400 799 A 399 399 0 0 1 400 1" fill="none" stroke="white" stroke-width="4" pathLength="2520"/></mask></defs><ellipse cx="400" cy="400" rx="399" ry="399" mask="url(#ld-mask-inner)"/></svg>
+  <div class="loader__center">
+    <div class="loader__logo">
+      <svg class="loader__zones" viewBox="0 0 96 96" overflow="visible"><g class="loader__zone" style="--tx:0.0px;--ty:-20.0px;--i:0"><rect x="44.50" y="3.50" width="7" height="7" rx="1.2" transform="rotate(0.0 48.00 7.00)"/></g><g class="loader__zone" style="--tx:7.7px;--ty:-18.5px;--i:1"><rect x="60.19" y="6.62" width="7" height="7" rx="1.2" transform="rotate(22.5 63.69 10.12)"/></g><g class="loader__zone" style="--tx:14.1px;--ty:-14.1px;--i:2"><rect x="73.49" y="15.51" width="7" height="7" rx="1.2" transform="rotate(45.0 76.99 19.01)"/></g><g class="loader__zone" style="--tx:18.5px;--ty:-7.7px;--i:3"><rect x="82.38" y="28.81" width="7" height="7" rx="1.2" transform="rotate(67.5 85.88 32.31)"/></g><g class="loader__zone" style="--tx:20.0px;--ty:0.0px;--i:4"><rect x="85.50" y="44.50" width="7" height="7" rx="1.2" transform="rotate(90.0 89.00 48.00)"/></g><g class="loader__zone" style="--tx:18.5px;--ty:7.7px;--i:5"><rect x="82.38" y="60.19" width="7" height="7" rx="1.2" transform="rotate(112.5 85.88 63.69)"/></g><g class="loader__zone" style="--tx:14.1px;--ty:14.1px;--i:6"><rect x="73.49" y="73.49" width="7" height="7" rx="1.2" transform="rotate(135.0 76.99 76.99)"/></g><g class="loader__zone" style="--tx:7.7px;--ty:18.5px;--i:7"><rect x="60.19" y="82.38" width="7" height="7" rx="1.2" transform="rotate(157.5 63.69 85.88)"/></g><g class="loader__zone" style="--tx:0.0px;--ty:20.0px;--i:8"><rect x="44.50" y="85.50" width="7" height="7" rx="1.2" transform="rotate(180.0 48.00 89.00)"/></g><g class="loader__zone" style="--tx:-7.7px;--ty:18.5px;--i:9"><rect x="28.81" y="82.38" width="7" height="7" rx="1.2" transform="rotate(202.5 32.31 85.88)"/></g><g class="loader__zone" style="--tx:-14.1px;--ty:14.1px;--i:10"><rect x="15.51" y="73.49" width="7" height="7" rx="1.2" transform="rotate(225.0 19.01 76.99)"/></g><g class="loader__zone" style="--tx:-18.5px;--ty:7.7px;--i:11"><rect x="6.62" y="60.19" width="7" height="7" rx="1.2" transform="rotate(247.5 10.12 63.69)"/></g><g class="loader__zone" style="--tx:-20.0px;--ty:0.0px;--i:12"><rect x="3.50" y="44.50" width="7" height="7" rx="1.2" transform="rotate(270.0 7.00 48.00)"/></g><g class="loader__zone" style="--tx:-18.5px;--ty:-7.7px;--i:13"><rect x="6.62" y="28.81" width="7" height="7" rx="1.2" transform="rotate(292.5 10.12 32.31)"/></g><g class="loader__zone" style="--tx:-14.1px;--ty:-14.1px;--i:14"><rect x="15.51" y="15.51" width="7" height="7" rx="1.2" transform="rotate(315.0 19.01 19.01)"/></g><g class="loader__zone" style="--tx:-7.7px;--ty:-18.5px;--i:15"><rect x="28.81" y="6.62" width="7" height="7" rx="1.2" transform="rotate(337.5 32.31 10.12)"/></g></svg>
+      <svg class="loader__ring" viewBox="0 0 96 96"><circle cx="48" cy="48" r="29" pathLength="60"/></svg>
+      <img class="loader__emblem" src="assets/img/emblem.png" width="52" height="52" alt="">
+    </div>
+    <p class="loader__status"><span>Загружаем 3D-макет двора</span><span class="loader__pct num" data-loader-pct>0&#8239;%</span></p>
+  </div>
+</div>
+
+<header class="head" data-head>
+  <nav class="head__nav" data-nav aria-label="Разделы">
+    <a href="#system">Решение</a>
+    <a href="#pilot">Пилот</a>
+    <a href="#economy">Экономика</a>
+    <a href="#round">Раунд</a>
+  </nav>
+  <a class="head__brand" href="#top" aria-label="PANORAMA — в начало">
+    <img class="head__emblem" src="assets/img/emblem.png" width="32" height="32" alt="">
+    <span class="head__word">PANORAMA</span>
+  </a>
+  <div class="head__ctas">
+    <a class="pill pill--glass head__doc" href="assets/docs/PANORAMA_comparison_report.pdf" download>Отчёт, PDF</a>
+    <a class="pill pill--dark" href="#contact" data-cta>Обсудить участие</a>
+  </div>
+  <button class="head__burger" type="button" data-burger aria-controls="menu" aria-expanded="false">
+    <span class="sr-only">Меню</span>
+    <span class="head__burger-line head__burger-line--1"></span><span class="head__burger-line head__burger-line--2"></span>
+  </button>
+</header>
+
+<div class="menu" id="menu" data-overlay="menu" hidden>
+  <nav class="menu__nav" aria-label="Разделы, меню">
+    <a href="#system">Как это работает</a>
+    <a href="#hardware">Шкаф и приложение</a>
+    <a href="#pilot">Пилотная площадка</a>
+    <a href="#economy">Цена и конкуренты</a>
+    <a href="#checks">Проверка и риски</a>
+    <a href="#round">Раунд</a>
+  </nav>
+  <div class="menu__ctas">
+    <a class="pill pill--dark" href="#contact">Обсудить участие</a>
+    <a class="pill pill--glass" href="assets/docs/PANORAMA_comparison_report.pdf" download>Отчёт, PDF</a>
+  </div>
+</div>
+
+<!-- Сцена: белый макет двора (WebGL). Видна под первым экраном и под пином «Как работает».
+     Без WebGL и без JS — постер. Подписи датчиков и зон — DOM поверх холста -->
+<div class="stage" aria-hidden="true">
+  <img class="stage__poster" src="assets/img/maquette.webp" width="1600" height="1000" alt="" decoding="async">
+  <canvas class="stage__canvas"></canvas>
+  <div class="stage__labels"></div>
+</div>
+
+<main id="main" tabindex="-1">
+
+  <section class="hero" id="top" data-block="01-первый-экран" data-loud="громкий">
+    <div class="hero__content">
+      <p class="label hero__label">Инвестиционный проект · Москва · 2026</p>
+      <h1 class="hero__title">Система полива, которая понимает состояние участка</h1>
+      <p class="hero__subtitle">Автоматизированное управление поливом для жилых и коммерческих ландшафтов: датчики, локальный контроллер и инженерный шкаф на 16 зон. Привлекаем 1 млн ₽ и ищем 2⁠–⁠3 пилотных объекта.</p>
+      <a class="pill pill--dark hero__cta" href="#contact" data-cta>Обсудить участие</a>
+    </div>
+    <a class="hero__scroll" href="#system"><span><span class="hsbtn-in">Листайте — покажем на макете двора</span></span></a>
+    <p class="hero__caption caption">Двор корпуса 1, ЖК «Life Варшавская» — типовая пилотная площадка. Макет построен по генплану; размещение системы — концепт</p>
+  </section>
+
+  <section class="sec problem" id="problem" data-block="02-проблема" data-loud="средний">
+    <div class="wrap">
+      <header class="sec-head problem__head">
+        <p class="label" data-in="text">Проблема рынка</p>
+        <h2 data-in="text">Обычная автоматика не видит, что происходит с водой и растениями</h2>
+      </header>
+      <div class="cards4" data-cards>
+        <article class="card4">
+          <div class="card4__content">
+            <span class="num-box"><span>01</span></span>
+            <h3 class="card4__title">Один график для всех</h3>
+            <p class="card4__text">Газон, деревья и цветники получают воду по времени, а не по фактической потребности.</p>
+          </div>
+        </article>
+        <article class="card4">
+          <div class="card4__content">
+            <span class="num-box"><span>02</span></span>
+            <h3 class="card4__title">Нет полной картины</h3>
+            <p class="card4__text">Влажность, расход и давление живут в разных устройствах или не измеряются вовсе.</p>
+          </div>
+        </article>
+        <article class="card4">
+          <div class="card4__content">
+            <span class="num-box"><span>03</span></span>
+            <h3 class="card4__title">Отказ виден слишком поздно</h3>
+            <p class="card4__text">Утечку, сухой ход или закрытую зону замечают после повреждения посадок.</p>
+          </div>
+        </article>
+        <article class="card4">
+          <div class="card4__content">
+            <span class="num-box"><span>04</span></span>
+            <h3 class="card4__title">Корректировка вручную</h3>
+            <p class="card4__text">Погода, сезон и тип почвы зависят от опыта конкретного специалиста.</p>
+          </div>
+        </article>
+      </div>
+      <div class="problem__bottom">
+        <figure class="media problem__media" data-in="media">
+          <img src="assets/img/cutaway-960.webp" srcset="assets/img/cutaway-640.webp 640w, assets/img/cutaway-960.webp 960w, assets/img/cutaway.webp 1600w" sizes="(max-width: 1023px) calc(100vw - 40px), 58vw" width="1600" height="900" alt="Разрез двора: под газоном и цветниками проходит магистраль с клапанными коробами, справа — инженерный шкаф" loading="lazy" decoding="async">
+          <figcaption class="caption">Концептуальная визуализация инженерной трассы; не исполнительная съёмка</figcaption>
+        </figure>
+        <div class="problem__outcome">
+          <p class="label" data-in="text">Бизнес-следствие</p>
+          <p class="problem__outcome-text" data-in="text">Перерасход воды, потеря посадок, аварийные выезды и споры между подрядчиками</p>
+          <p class="problem__note" data-in="text">Главная проблема — нет обратной связи: система выполняет расписание, но не понимает результат. Датчики ценны не сами по себе — они позволяют раньше заметить утечку, недостаток воды или сбой насоса.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="flow" id="system" data-block="03-как-работает" data-loud="громкий">
+    <div class="flow__wrapper">
+      <header class="flow__head">
+        <p class="label">Технологическое решение</p>
+        <h2 class="flow__h2">Каждой зоне — свой режим полива</h2>
+      </header>
+
+      <div class="flow__legend" data-legend hidden>
+        <p class="flow__legend-title" data-legend-title>Прямое солнце во дворе, часов в день</p>
+        <div class="flow__legend-scale"><span class="flow__legend-ramp"></span></div>
+        <p class="flow__legend-ends"><span data-legend-lo>менее 1</span><span data-legend-hi>7</span></p>
+        <p class="flow__legend-src caption">По схеме проекта благоустройства, сетка 1×1 м</p>
+      </div>
+
+      <ol class="flow__steps">
+        <li class="flow__step" data-step="1">
+          <div class="flow__header">
+            <span class="num-box flow__number"><span>01</span></span>
+            <h3 class="flow__title"><button class="flow__btn" type="button">Участок неоднороден</button></h3>
+          </div>
+          <div class="flow__body"><div class="flow__body-inner">
+            <span class="flow__track"><span class="flow__track-bar"><span class="flow__track-fill"></span></span></span>
+            <p class="flow__description">Во дворе пилотного объекта прямое солнце — от менее часа до 7 часов в день, грунт над паркингом — от 1 до 2,7 м. Один график полива здесь не работает по определению.</p>
+          </div></div>
+        </li>
+        <li class="flow__step" data-step="2">
+          <div class="flow__header">
+            <span class="num-box flow__number"><span>02</span></span>
+            <h3 class="flow__title"><button class="flow__btn" type="button">Датчики измеряют</button></h3>
+          </div>
+          <div class="flow__body"><div class="flow__body-inner">
+            <span class="flow__track"><span class="flow__track-bar"><span class="flow__track-fill"></span></span></span>
+            <p class="flow__description">Влажность почвы в каждой зоне, расход и давление в магистрали, погода. Датчики почвы работают по линии RS-485 и дают фактическую обратную связь вместо календаря.</p>
+          </div></div>
+        </li>
+        <li class="flow__step" data-step="3">
+          <div class="flow__header">
+            <span class="num-box flow__number"><span>03</span></span>
+            <h3 class="flow__title"><button class="flow__btn" type="button">Контроллер рассчитывает</button></h3>
+          </div>
+          <div class="flow__body"><div class="flow__body-inner">
+            <span class="flow__track"><span class="flow__track-bar"><span class="flow__track-fill"></span></span></span>
+            <p class="flow__description">Отдельный сценарий для каждой зоны и вида растений: газон, деревья, кустарники, цветники. Решение принимается на объекте и не зависит от облака.</p>
+          </div></div>
+        </li>
+        <li class="flow__step" data-step="4">
+          <div class="flow__header">
+            <span class="num-box flow__number"><span>04</span></span>
+            <h3 class="flow__title"><button class="flow__btn" type="button">Шкаф исполняет</button></h3>
+          </div>
+          <div class="flow__body"><div class="flow__body-inner">
+            <span class="flow__track"><span class="flow__track-bar"><span class="flow__track-fill"></span></span></span>
+            <p class="flow__description">Насос 230 В и до 16 клапанов 24 В: вода идёт только в ту зону, которой она нужна сейчас. Профили нормального расхода и давления по зонам — первая доработка в плане.</p>
+          </div></div>
+        </li>
+        <li class="flow__step" data-step="5">
+          <div class="flow__header">
+            <span class="num-box flow__number"><span>05</span></span>
+            <h3 class="flow__title"><button class="flow__btn" type="button">Защита останавливает</button></h3>
+          </div>
+          <div class="flow__body"><div class="flow__body-inner">
+            <span class="flow__track"><span class="flow__track-bar"><span class="flow__track-fill"></span></span></span>
+            <p class="flow__description">Утечку, сухой ход и опасный режим. Аппаратная цепь снимает разрешение насоса независимо от приложения и ИИ, даже без интернета.</p>
+          </div></div>
+        </li>
+      </ol>
+
+      <p class="flow__specs">Так система спроектирована; физические испытания впереди<br>до 16 зон · клапаны 24 В · насос 230 В · Raspberry Pi + ESP32 · расчётный расход 3,0⁠–⁠3,2 м³/ч</p>
+    </div>
+  </section>
+
+  <section class="sec std" id="hardware" data-block="04-шкаф" data-loud="тихий">
+    <div class="wrap std__in">
+      <figure class="media std__media" data-in="media">
+        <img src="assets/img/cabinet-960.webp" srcset="assets/img/cabinet-640.webp 640w, assets/img/cabinet-960.webp 960w, assets/img/cabinet.webp 1600w" sizes="(max-width: 1023px) calc(100vw - 40px), 52vw" width="1600" height="900" alt="Открытый инженерный шкаф: автоматы, трансформатор, контактор, реле, Raspberry Pi, ESP32 и клеммы на 16 зон" loading="lazy" decoding="async">
+        <figcaption class="caption">Концептуальный рендер по компоновке DWG; состав уточняется после закупки компонентов</figcaption>
+      </figure>
+      <div class="std__content">
+        <p class="label" data-in="text">Инженерный шкаф</p>
+        <h2 class="std__title" data-in="text">Не таймер, а инженерный узел</h2>
+        <p class="std__desc" data-in="text">В основе — насосный контур 230 В, выходы на 16 клапанов 24 VAC, Raspberry Pi для интерфейса и аналитики и ESP32 для управления в реальном времени со сторожевым таймером. Аппаратная цепь безопасности — «стоп», утечка, низкий уровень воды — размыкает контактор насоса KM1 независимо от Linux, приложения или алгоритма.</p>
+        <dl class="spec" data-in="text">
+          <div class="spec__row"><dt>Зоны</dt><dd>до 16</dd></div>
+          <div class="spec__row"><dt>Клапаны</dt><dd>24 VAC</dd></div>
+          <div class="spec__row"><dt>Насос</dt><dd>230 В, защита сухого хода</dd></div>
+          <div class="spec__row"><dt>Расход</dt><dd>3,0⁠–⁠3,2 м³/ч, расчётный</dd></div>
+          <div class="spec__row"><dt>Вычисления</dt><dd>Raspberry Pi + ESP32</dd></div>
+          <div class="spec__row"><dt>Датчики почвы</dt><dd>RS-485</dd></div>
+          <div class="spec__row"><dt>Интеграция</dt><dd>Modbus TCP, MQTT, API — в плане</dd></div>
+        </dl>
+        <p class="status" data-in="text"><span class="status__dot" aria-hidden="true"></span><span>Статус: расчёт пройден, ждём физических испытаний <span class="nw">T01–T14</span> и проверки 230 В</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec std std--rev" id="app" data-block="05-приложение" data-loud="средний">
+    <div class="wrap std__in">
+      <figure class="media std__media" data-in="media">
+        <img src="assets/img/app-960.webp" srcset="assets/img/app-640.webp 640w, assets/img/app-960.webp 960w, assets/img/app.webp 1600w" sizes="(max-width: 1023px) calc(100vw - 40px), 52vw" width="1600" height="900" alt="Концепт приложения на планшете и двух телефонах: карта зон, влажность, расход, давление, погода и ИИ-рекомендация полива" loading="lazy" decoding="async">
+        <figcaption class="caption">Продуктовый концепт интерфейса, не скриншот готового приложения</figcaption>
+      </figure>
+      <div class="std__content">
+        <p class="label" data-in="text">Приложение и ИИ</p>
+        <h2 class="std__title" data-in="text">Приложение показывает объект и рассчитывает полив</h2>
+        <p class="std__desc" data-in="text">На одном экране — карта зон, влажность, расход, давление, погода, история и предупреждения. ИИ учитывает растения, почву, прогноз и данные датчиков и предлагает время, длительность и объём полива. Сначала инженер подтверждает сценарий; автоматический режим — только в безопасных пределах.</p>
+        <div class="rules" data-in="text">
+          <p class="rules__head">Начинаем с правил, а не с нейросети</p>
+          <ol class="rules__list">
+            <li class="rules__row"><span class="rules__if">Влажность ниже порога + нет дождя + разрешён слот</span><span class="rules__then">полив</span></li>
+            <li class="rules__row"><span class="rules__if">Расход выше профиля зоны</span><span class="rules__then">авария</span></li>
+            <li class="rules__row"><span class="rules__if">Клапан открыт, потока нет</span><span class="rules__then">диагностика</span></li>
+          </ol>
+          <p class="rules__foot">После сезона данных правила сравниваются с ML-моделью — так доказывается, даёт ли ИИ добавочную ценность.</p>
+        </div>
+        <p class="status" data-in="text"><span class="status__dot" aria-hidden="true"></span><span>Статус: приложение и ИИ — этап разработки</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec pilot" id="pilot" data-block="06-пилот" data-loud="средний">
+    <div class="wrap">
+      <header class="pilot__head">
+        <div class="pilot__head-main">
+          <p class="label" data-in="text">Пилотная площадка</p>
+          <h2 data-in="text">ЖК «Life Варшавская» — типовая пилотная площадка</h2>
+        </div>
+        <p class="pilot__lead" data-in="text">Москва, 2-й Котляковский переулок, очередь 2.4. Двор над подземным паркингом, бульвар, площадь с перголой и сад на кровле въездной рампы. Разные посадки, зоны и режимы полива на одном участке — на этом объекте показываем, как система ложится на реальный проект. Двор корпуса 1 на макете выше — 10 зон одного шкафа, размещение концептуальное.</p>
+      </header>
+
+      <dl class="facts" data-in="text">
+        <div class="facts__item"><dt class="facts__value num">22 967 м²</dt><dd class="facts__label">территория благоустройства</dd></div>
+        <div class="facts__item"><dt class="facts__value num">5 746 м²</dt><dd class="facts__label">озеленение</dd></div>
+        <div class="facts__item"><dt class="facts__value num">2 328 м²</dt><dd class="facts__label">из них — над паркингом</dd></div>
+        <div class="facts__item"><dt class="facts__value num">1⁠–⁠2,7 м</dt><dd class="facts__label">грунт во дворе</dd></div>
+        <div class="facts__item"><dt class="facts__value num">&lt;1⁠–⁠7 ч</dt><dd class="facts__label">прямого солнца в день</dd></div>
+      </dl>
+
+      <div class="seasons" data-seasons>
+        <div class="seasons__frames media">
+          <figure class="seasons__slide is-active" data-slide="0" id="season-0" role="tabpanel" aria-label="Лето">
+            <img src="assets/img/dvor-leto-1280.webp" srcset="assets/img/dvor-leto-720.webp 720w, assets/img/dvor-leto-1280.webp 1280w, assets/img/dvor-leto.webp 1920w" sizes="(max-width: 767px) calc(100vw - 40px), calc(100vw - 96px)" width="1920" height="1008" alt="Двор летом: дорожка между пышными цветниками и кустарниками, деревянный павильон-цилиндр, спортивная площадка за сеткой" loading="lazy" decoding="async">
+          </figure>
+          <figure class="seasons__slide" data-slide="1" id="season-1" role="tabpanel" aria-label="Осень" aria-hidden="true">
+            <img src="assets/img/dvor-osen-1280.webp" srcset="assets/img/dvor-osen-720.webp 720w, assets/img/dvor-osen-1280.webp 1280w, assets/img/dvor-osen.webp 1920w" sizes="(max-width: 767px) calc(100vw - 40px), calc(100vw - 96px)" width="1920" height="1008" alt="Тот же двор осенью: жёлтые и красные кроны, листва на дорожке" loading="lazy" decoding="async">
+          </figure>
+          <figure class="seasons__slide" data-slide="2" id="season-2" role="tabpanel" aria-label="Зима" aria-hidden="true">
+            <img src="assets/img/dvor-zima-1280.webp" srcset="assets/img/dvor-zima-720.webp 720w, assets/img/dvor-zima-1280.webp 1280w, assets/img/dvor-zima.webp 1920w" sizes="(max-width: 767px) calc(100vw - 40px), calc(100vw - 96px)" width="1920" height="1008" alt="Тот же двор зимой: снег на посадках, голые деревья" loading="lazy" decoding="async">
+          </figure>
+          <figure class="seasons__slide" data-slide="3" id="season-3" role="tabpanel" aria-label="Весна" aria-hidden="true">
+            <img src="assets/img/dvor-vesna-1280.webp" srcset="assets/img/dvor-vesna-720.webp 720w, assets/img/dvor-vesna-1280.webp 1280w, assets/img/dvor-vesna.webp 1920w" sizes="(max-width: 767px) calc(100vw - 40px), calc(100vw - 96px)" width="1920" height="1008" alt="Тот же двор весной: первая зелень, открытый грунт в цветниках" loading="lazy" decoding="async">
+          </figure>
+        </div>
+        <div class="seasons__bar">
+          <div class="seasons__texts" aria-live="polite">
+            <p class="seasons__text is-active" data-text="0"><b>Лето.</b> Пик водопотребления: полив по фактической влажности каждой зоны; прогноз погоды — дополнительный вход, чтобы не поливать после дождя.</p>
+            <p class="seasons__text" data-text="1" hidden><b>Осень.</b> Нормы снижаются вслед за погодой и влажностью почвы. Консервацию сети проводит сервисная служба.</p>
+            <p class="seasons__text" data-text="2" hidden><b>Зима.</b> Сеть осушена и законсервирована, шкаф ждёт сезона. Сезонность — признанный риск проекта для сервиса и выручки.</p>
+            <p class="seasons__text" data-text="3" hidden><b>Весна.</b> Пуск после консервации. В плане разработки — автоматическая диагностика: каждая зона открывается коротко, давление и расход сверяются с профилем.</p>
+          </div>
+          <div class="seasons__controls">
+            <div class="seasons__tabs" role="tablist" aria-label="Сезон">
+              <button class="seasons__tab is-active" type="button" role="tab" aria-selected="true" aria-controls="season-0" data-index="0"><span>Лето</span></button>
+              <button class="seasons__tab" type="button" role="tab" aria-selected="false" aria-controls="season-1" data-index="1"><span>Осень</span></button>
+              <button class="seasons__tab" type="button" role="tab" aria-selected="false" aria-controls="season-2" data-index="2"><span>Зима</span></button>
+              <button class="seasons__tab" type="button" role="tab" aria-selected="false" aria-controls="season-3" data-index="3"><span>Весна</span></button>
+            </div>
+            <div class="seasons__arrows">
+              <button class="seasons__arrow seasons__arrow--prev" type="button" aria-label="Предыдущий сезон" disabled><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+              <button class="seasons__arrow seasons__arrow--next" type="button" aria-label="Следующий сезон"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="caption pilot__src">Проектные визуализации благоустройства ЖК «Life Варшавская», АБ «Базис», 2024. Системы PANORAMA на изображениях нет</p>
+
+      <div class="gardens">
+        <figure class="garden" data-in="media">
+          <div class="media garden__media"><img src="assets/img/bulvar-720.webp" srcset="assets/img/bulvar-720.webp 720w, assets/img/bulvar.webp 1280w" sizes="(max-width: 767px) calc(100vw - 40px), 31vw" width="1280" height="673" alt="Бульвар: аллея с кустарниками, многоствольными деревьями и скамьями" loading="lazy" decoding="async"></div>
+          <figcaption><span class="garden__title">Бульвар</span><span class="garden__text">Разные режимы для деревьев, кустарников, газона и цветников</span></figcaption>
+        </figure>
+        <figure class="garden" data-in="media">
+          <div class="media garden__media"><img src="assets/img/ploshchad-720.webp" srcset="assets/img/ploshchad-720.webp 720w, assets/img/ploshchad.webp 1280w" sizes="(max-width: 767px) calc(100vw - 40px), 31vw" width="1280" height="672" alt="Площадь под перголой: шезлонги на гравии среди деревьев и многолетников" loading="lazy" decoding="async"></div>
+          <figcaption><span class="garden__title">Площадь</span><span class="garden__text">Теневые зоны и сложные миксы многолетников</span></figcaption>
+        </figure>
+        <figure class="garden" data-in="media">
+          <div class="media garden__media"><img src="assets/img/rampa-720.webp" srcset="assets/img/rampa-720.webp 720w, assets/img/rampa.webp 1280w" sizes="(max-width: 767px) calc(100vw - 40px), 31vw" width="1280" height="720" alt="Сад на кровле въездной рампы: террасы с посадками ступенями между корпусами" loading="lazy" decoding="async"></div>
+          <figcaption><span class="garden__title">Рампа</span><span class="garden__text">Сад на кровле: малый объём субстрата, свой микрокапельный контур</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="plants">
+        <div class="plants__intro">
+          <p class="label" data-in="text">Посадки</p>
+          <h3 class="plants__title" data-in="text">Сажать по идее архитектора, а не по удобству полива</h3>
+          <p class="plants__text" data-in="text">Автоматика не ограничивает ассортимент. Правило одно: растение не подключается к той же зоне, если его потребность во влаге заметно отличается от соседей. Решение — отдельный клапан, свой датчик и подходящий эмиттер.</p>
+        </div>
+        <ul class="plants__list" data-in="text">
+          <li><span>Газонные травы</span><span>дождеватели, MP Rotator</span></li>
+          <li><span>Деревья и крупные кустарники</span><span>капельные кольца</span></li>
+          <li><span>Живые изгороди</span><span>капельная трубка</span></li>
+          <li><span>Многолетники и цветники</span><span>микрокапельный</span></li>
+          <li><span>Розы, ягодные, плодовые</span><span>капельный</span></li>
+          <li><span>Хвойные</span><span>капельный, отдельной зоной</span></li>
+          <li><span>Лаванда, шалфей, очитки</span><span>малая норма, отдельной зоной</span></li>
+          <li><span>Гортензии, рододендроны</span><span>стабильная влажность, отдельной зоной</span></li>
+        </ul>
+        <div class="plants__no" data-in="text">
+          <p class="plants__no-head">Без адаптации не подключаем</p>
+          <p>Болотные и водные растения, промышленную теплицу с фертигацией, растения с разной потребностью во влаге в одной зоне.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec value" id="value" data-block="07-ценность" data-loud="средний">
+    <div class="wrap">
+      <header class="sec-head value__head">
+        <p class="label" data-in="text">Ценность для рынка</p>
+        <h2 data-in="text">Больше свободы для благоустройства — и прозрачная эксплуатация</h2>
+      </header>
+      <div class="cards4" data-cards>
+        <article class="card4">
+          <div class="card4__content">
+            <span class="num-box"><span>01</span></span>
+            <h3 class="card4__title">Девелопер</h3>
+            <p class="card4__text">Защищает готовое благоустройство после сдачи. Дорогие газоны, деревья и кустарники меньше зависят от человеческого фактора.</p>
+          </div>
+        </article>
+        <article class="card4">
+          <div class="card4__content">
+            <span class="num-box"><span>02</span></span>
+            <h3 class="card4__title">Генподрядчик</h3>
+            <p class="card4__text">Получает контролируемый инженерный узел с журналом событий и диагностикой, а не «чёрный ящик», который приходится искать по участку.</p>
+          </div>
+        </article>
+        <article class="card4">
+          <div class="card4__content">
+            <span class="num-box"><span>03</span></span>
+            <h3 class="card4__title">Управляющая компания</h3>
+            <p class="card4__text">Видит расход, давление и аварии удалённо и сокращает диагностические выезды. Журнал зон — аргумент в гарантийных спорах.</p>
+          </div>
+        </article>
+        <article class="card4">
+          <div class="card4__content">
+            <span class="num-box"><span>04</span></span>
+            <h3 class="card4__title">Ландшафтный интегратор</h3>
+            <p class="card4__text">Быстрее находит неисправности и продаёт мониторинг после монтажа. PANORAMA идёт на рынок через интеграторов, а не вместо них.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="ops">
+        <div class="ops__intro">
+          <h3 class="ops__title" data-in="text">От ежедневного полива — к контролю по исключениям</h3>
+          <p class="ops__text" data-in="text">Автоматизация сокращает не всю работу садовника, а подачу воды и диагностику. Обрезка, уход, ремонт форсунок, очистка фильтров и зимняя консервация остаются. Эффект в часах, воде и энергии измеряется на пилоте.</p>
+        </div>
+        <div class="table-wrap" data-in="text">
+          <table class="ops__table">
+            <caption class="sr-only">Как меняется работа персонала</caption>
+            <thead>
+              <tr><th scope="col">Операция</th><th scope="col">Ручной полив</th><th scope="col">Обычный автополив</th><th scope="col">PANORAMA</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Запуск полива</th><td>Человек открывает краны и шланги</td><td>Контроллер по расписанию</td><td>Решение по профилю зоны и датчикам</td></tr>
+              <tr><th scope="row">Проверка влажности</th><td>На глаз</td><td>Иногда датчик дождя</td><td>Почва + погода + история зоны</td></tr>
+              <tr><th scope="row">Поиск утечки</th><td>После ущерба или жалобы</td><td>Ручной обход</td><td>Ранний сигнал по расходу и давлению</td></tr>
+              <tr><th scope="row">Насос</th><td>Контроль косвенный</td><td>Автоматика запуска</td><td>Аппаратные блокировки и журнал событий</td></tr>
+              <tr><th scope="row">Сервис</th><td>Регулярные обходы</td><td>Плановые проверки</td><td>Проверки и реакция на конкретные аварии</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec price" id="economy" data-block="08-цена" data-loud="средний">
+    <div class="wrap">
+      <header class="sec-head price__head">
+        <p class="label" data-in="text">Цена и конкуренты</p>
+        <h2 data-in="text">PANORAMA сравнивается с комплектом оборудования, а не с таймером</h2>
+      </header>
+
+      <div class="bars" data-bars>
+        <p class="bars__note caption">Розничные цены в РФ, ориентир на 18.09.2026, без монтажа. В аналитическом отчёте — замер на 14.08.2026, поэтому цифры немного отличаются</p>
+        <div class="bars__row">
+          <div class="bars__name"><span class="bars__title">Solem SMART-IS-12</span><span class="bars__meta">12 зон · контроллер</span></div>
+          <div class="bars__track"><span class="bars__fill" style="--to:41;--from:41"></span></div>
+          <span class="bars__value num">≈ 41 тыс ₽</span>
+        </div>
+        <div class="bars__row">
+          <div class="bars__name"><span class="bars__title">Rain Bird ESP-TM2-12</span><span class="bars__meta">12 зон · Wi-Fi отдельно</span></div>
+          <div class="bars__track"><span class="bars__fill" style="--to:46;--from:46"></span></div>
+          <span class="bars__value num">≈ 46 тыс ₽</span>
+        </div>
+        <div class="bars__row">
+          <div class="bars__name"><span class="bars__title">Hunter Pro-HC 12</span><span class="bars__meta">12 зон · приложение</span></div>
+          <div class="bars__track"><span class="bars__fill" style="--to:68;--from:68"></span></div>
+          <span class="bars__value num">≈ 68 тыс ₽</span>
+        </div>
+        <div class="bars__row">
+          <div class="bars__name"><span class="bars__title">Hunter: 24 зоны + датчики</span><span class="bars__meta">контроллер + 4 датчика почвы + расходомер</span></div>
+          <div class="bars__track"><span class="bars__fill" style="--to:221;--from:221"></span></div>
+          <span class="bars__value num">≈ 221 тыс ₽</span>
+        </div>
+        <div class="bars__row bars__row--own">
+          <div class="bars__name"><span class="bars__title">PANORAMA Control</span><span class="bars__meta">шкаф · насос 230 В · до 16 зон · локальная защита · интеграция датчиков</span></div>
+          <div class="bars__track"><span class="bars__fill bars__fill--range" style="--to:450;--from:360"></span></div>
+          <span class="bars__value num">360⁠–⁠450 тыс ₽</span>
+        </div>
+        <p class="bars__note caption">Целевой пакет PANORAMA; итоговое сравнение фиксируется после запроса коммерческих предложений и пилотной сметы</p>
+      </div>
+
+      <div class="verdict">
+        <div class="verdict__main">
+          <p class="label" data-in="text">Честный вывод</p>
+          <p class="verdict__text" data-in="text">Мы дороже простого контроллера — и это другой класс продукта.</p>
+        </div>
+        <div class="verdict__side" data-in="text">
+          <p class="verdict__head">В комплекте конкурента за 221 тыс ₽ ещё нет:</p>
+          <ul class="verdict__list">
+            <li>защиты насоса 230 В</li>
+            <li>контроля давления</li>
+            <li>инженерного шкафа</li>
+            <li>проектирования и наладки</li>
+          </ul>
+          <p class="verdict__foot">Задача пилота — подтвердить цену коммерческими предложениями и полной сметой.</p>
+        </div>
+      </div>
+
+      <div class="rivals">
+        <h3 class="rivals__title" data-in="text">Как PANORAMA стоит против каждого</h3>
+        <ul class="rivals__list" data-in="text">
+          <li class="rivals__item"><span class="rivals__name">Hunter Hydrawise</span><span class="rivals__what">Зрелость, сервис, бренд, погодная коррекция</span><span class="rivals__us">Можем выиграть локальной мультисенсорной диагностикой и открытой логикой</span></li>
+          <li class="rivals__item"><span class="rivals__name">Rain Bird ESP-TM2</span><span class="rivals__what">Надёжная классика, большая база монтажников</span><span class="rivals__us">Глубже связываем расход, давление, почву и аварийные состояния</span></li>
+          <li class="rivals__item"><span class="rivals__name">Solem SMART-IS</span><span class="rivals__what">Близок к «умному» сегменту, есть водомер и утечки</span><span class="rivals__us">Сильный прямой конкурент — преимущество доказываем данными и безопасностью</span></li>
+          <li class="rivals__item"><span class="rivals__name">Интеграторы Hunter / Rain Bird</span><span class="rivals__what">Монтаж под ключ и ответственность за гидравлику</span><span class="rivals__us">Продаёмся через них как диагностический слой поверх их гидравлики</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec checks" id="checks" data-block="09-проверка" data-loud="тихий">
+    <div class="wrap">
+      <header class="checks__head">
+        <div>
+          <p class="label" data-in="text">Проверка</p>
+          <h2 data-in="text">Метрики вместо рекламных обещаний</h2>
+        </div>
+        <p class="checks__lead" data-in="text">Сегодня пройден расчёт, физических испытаний ещё не было. Поэтому путь к продукту расписан этапами, у каждого — проверяемое условие перехода. Этапы 1⁠–⁠3 — стенды первых трёх месяцев раунда; этапы 4⁠–⁠6 идут на пилотных объектах, а сравнительный сезон требует полного сезона полива.</p>
+      </header>
+      <ol class="stages">
+        <li class="stage-item" data-in="text"><span class="num-box"><span>1</span></span><div class="stage-item__body"><p class="stage-item__where">Электрический стенд</p><p class="stage-item__what">16 каналов 24 VAC под нагрузкой, watchdog, 100 перезапусков</p><p class="stage-item__gate"><span>Условие</span>0 ложных запусков; безопасное состояние после сброса</p></div></li>
+        <li class="stage-item" data-in="text"><span class="num-box"><span>2</span></span><div class="stage-item__body"><p class="stage-item__where">Цепь безопасности NC</p><p class="stage-item__what">STOP, протечка, низкий уровень, защита двигателя</p><p class="stage-item__gate"><span>Условие</span>Каждый разрыв физически снимает KM1</p></div></li>
+        <li class="stage-item" data-in="text"><span class="num-box"><span>3</span></span><div class="stage-item__body"><p class="stage-item__where">Гидростенд, 2⁠–⁠4 зоны</p><p class="stage-item__what">Нет потока, повышенный расход, превышение давления</p><p class="stage-item__gate"><span>Условие</span>Каждый сценарий обнаружен и записан</p></div></li>
+        <li class="stage-item" data-in="text"><span class="num-box"><span>4</span></span><div class="stage-item__body"><p class="stage-item__where">Закрытый пилот</p><p class="stage-item__what">Реальный участок, 4⁠–⁠8 недель</p><p class="stage-item__gate"><span>Условие</span>Собраны базовые профили влажности, расхода и давления</p></div></li>
+        <li class="stage-item" data-in="text"><span class="num-box"><span>5</span></span><div class="stage-item__body"><p class="stage-item__where">Сравнительный сезон</p><p class="stage-item__what">Обычный алгоритм против интеллектуального</p><p class="stage-item__gate"><span>Условие</span>Вода, кВт·ч, часы труда, выезды, состояние растений</p></div></li>
+        <li class="stage-item" data-in="text"><span class="num-box"><span>6</span></span><div class="stage-item__body"><p class="stage-item__where">Строительный пилот</p><p class="stage-item__what">Девелопер, управляющая компания, интегратор</p><p class="stage-item__gate"><span>Условие</span>Подтверждены экономический эффект и формат интеграции</p></div></li>
+      </ol>
+      <div class="metrics">
+        <p class="metrics__head" data-in="text">Что измеряем на пилоте</p>
+        <ol class="metrics__list" data-in="text">
+          <li>м³ воды на 100 м²</li>
+          <li>кВт·ч насоса</li>
+          <li>человеко-часы обслуживания</li>
+          <li>аварийные и диагностические выезды</li>
+          <li>время обнаружения утечки</li>
+          <li>доля зон в целевой влажности</li>
+          <li>состояние посадок по оценке агронома</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq" data-block="10-вопросы" data-loud="тихий">
+    <div class="faq__container">
+      <div class="faq__left">
+        <p class="label" data-in="text">Вопросы инвестора</p>
+        <h2 class="faq__title" data-in="text">Риски — прямыми ответами</h2>
+      </div>
+      <div class="faq__split" aria-hidden="true"></div>
+      <div class="faq__right">
+        <div class="faq-item">
+          <h3 class="faq-item__h"><button class="faq-item__header" type="button" aria-expanded="false" aria-controls="faq-1" id="faq-1-btn"><span class="faq-item__question">Почему система дороже Hunter и Rain Bird?</span><span class="faq-item__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button></h3>
+          <div class="faq-item__content" id="faq-1" role="region" aria-labelledby="faq-1-btn"><p class="faq-item__answer">Сравнивать нужно с полным комплектом. Даже набор Hunter с датчиками и расходомером не включает шкаф, управление насосом 230 В, контроль давления, проектирование и пусконаладку. Ценность продаётся через снижение аварий, выездов и сохранность ландшафта — и подтверждается на пилоте сметой и коммерческими предложениями.</p></div>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-item__h"><button class="faq-item__header" type="button" aria-expanded="false" aria-controls="faq-2" id="faq-2-btn"><span class="faq-item__question">Что, если ИИ не даст эффекта?</span><span class="faq-item__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button></h3>
+          <div class="faq-item__content" id="faq-2" role="region" aria-labelledby="faq-2-btn"><p class="faq-item__answer">Продукт на ИИ не держится. Базовая ценность — правила и пороги, профили расхода и давления по зонам, аппаратная защита. ИИ без накопленных данных может оказаться маркетинговым слоем, поэтому после сезона его сравнивают с базовыми правилами и оставляют только при доказанной добавке.</p></div>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-item__h"><button class="faq-item__header" type="button" aria-expanded="false" aria-controls="faq-3" id="faq-3-btn"><span class="faq-item__question">Как снимается инженерный риск 230 В?</span><span class="faq-item__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button></h3>
+          <div class="faq-item__content" id="faq-3" role="region" aria-labelledby="faq-3-btn"><p class="faq-item__answer">Испытаниями до коммерческого выпуска: электрический стенд, проверка цепи безопасности, гидростенд. Команда подключает внешних специалистов по автоматике, гидравлике и 230 В. На испытания заложено 16 % раунда, на оборудование опытных шкафов — 43 %.</p></div>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-item__h"><button class="faq-item__header" type="button" aria-expanded="false" aria-controls="faq-4" id="faq-4-btn"><span class="faq-item__question">Зачем локальная логика, а не облако?</span><span class="faq-item__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button></h3>
+          <div class="faq-item__content" id="faq-4" role="region" aria-labelledby="faq-4-btn"><p class="faq-item__answer">Критические функции не должны зависеть от интернета. ESP32 держит управление в реальном времени и watchdog, Raspberry Pi — интерфейс и аналитику. Погода подключается как дополнительный вход, без которого система всё равно работает. Это важно для коттеджных посёлков, гостиниц и общественных пространств.</p></div>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-item__h"><button class="faq-item__header" type="button" aria-expanded="false" aria-controls="faq-5" id="faq-5-btn"><span class="faq-item__question">Рынок сезонный — как с выручкой?</span><span class="faq-item__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button></h3>
+          <div class="faq-item__content" id="faq-5" role="region" aria-labelledby="faq-5-btn"><p class="faq-item__answer">Сезонность и зимняя консервация повышают требования к сервису и усложняют годовую выручку — это признанный риск. Смягчают его две вещи из модели: каждый сезон пополняет датасет для алгоритмов и сервиса, а сервисные компании и управляющие компании могут продавать мониторинг после монтажа.</p></div>
+        </div>
+        <div class="faq-item">
+          <h3 class="faq-item__h"><button class="faq-item__header" type="button" aria-expanded="false" aria-controls="faq-6" id="faq-6-btn"><span class="faq-item__question">Почему продажи через интеграторов?</span><span class="faq-item__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button></h3>
+          <div class="faq-item__content" id="faq-6" role="region" aria-labelledby="faq-6-btn"><p class="faq-item__answer">У интеграторов Hunter и Rain Bird уже есть объекты, монтажники и ответственность за гидравлику, но ценность у них сосредоточена в монтаже и расписании. PANORAMA добавляет диагностику поверх привычной гидравлики — и даёт им сервис, который можно продавать после сдачи.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec round theme-dark" id="round" data-block="11-раунд" data-loud="громкий">
+    <div class="wrap">
+      <div class="round__top">
+        <div class="round__sum-wrap">
+          <p class="label">Раунд · 12 месяцев</p>
+          <p class="round__sum num">1 000 000 ₽</p>
+        </div>
+        <div class="round__head">
+          <h2 class="round__title fly">1 млн ₽ переводят систему в два опытных шкафа и 2⁠–⁠3 платных пилота</h2>
+          <p class="round__model">Модель выручки — продажа пакета PANORAMA Control по целевой цене 360⁠–⁠450 тыс ₽ за шкаф на 16 зон через ландшафтных интеграторов; мониторинг после монтажа — дополнительный сервис для них и управляющих компаний.</p>
+        </div>
+      </div>
+
+      <div class="done">
+        <p class="label">Что уже сделано</p>
+        <ul class="done__list">
+          <li><span class="done__what">Инженерный расчёт контура 230 В</span><span class="done__note">отчёт v5.0, участок 40 соток</span></li>
+          <li><span class="done__what">Компоновка шкафа</span><span class="done__note">модули в DWG, концептуальный рендер</span></li>
+          <li><span class="done__what">Смета и спецификация</span><span class="done__note">PANORAMA 230V v5</span></li>
+          <li><span class="done__what">Анализ рынка и цен</span><span class="done__note">отчёт 14.08.2026, обновление 18.09.2026</span></li>
+          <li><span class="done__what">Стратегия выхода на рынок и грантов</span><span class="done__note">GTM v1.0</span></li>
+          <li><span class="done__what">Концепт приложения</span><span class="done__note">интерфейс, сценарии ИИ</span></li>
+        </ul>
+      </div>
+
+      <div class="alloc" data-alloc>
+        <p class="alloc__head">Куда идут деньги</p>
+        <div class="alloc__bar" aria-hidden="true">
+          <span class="alloc__seg" style="--w:43"></span><span class="alloc__seg" style="--w:28"></span><span class="alloc__seg" style="--w:16"></span><span class="alloc__seg" style="--w:8"></span><span class="alloc__seg" style="--w:5"></span>
+        </div>
+        <ul class="alloc__legend">
+          <li><span class="alloc__pct num">43 %</span><span class="alloc__name">Оборудование</span><span class="alloc__rub num">430 000 ₽</span></li>
+          <li><span class="alloc__pct num">28 %</span><span class="alloc__name">Команда</span><span class="alloc__rub num">280 000 ₽</span></li>
+          <li><span class="alloc__pct num">16 %</span><span class="alloc__name">Испытания</span><span class="alloc__rub num">160 000 ₽</span></li>
+          <li><span class="alloc__pct num">8 %</span><span class="alloc__name">Запуск</span><span class="alloc__rub num">80 000 ₽</span></li>
+          <li><span class="alloc__pct num">5 %</span><span class="alloc__name">Право и учёт</span><span class="alloc__rub num">50 000 ₽</span></li>
+        </ul>
+        <p class="alloc__note">Деньги идут прежде всего в оборудование и физическую проверку; рекламной кампании в бюджете нет.</p>
+      </div>
+
+      <ol class="plan">
+        <li class="plan__item" data-in="text"><span class="plan__when">0⁠–⁠3 месяца</span><span class="plan__what">Два шкафа и стенд испытаний</span></li>
+        <li class="plan__item" data-in="text"><span class="plan__when">4⁠–⁠8 месяцев</span><span class="plan__what">Приложение, ИИ-сценарии и проверка безопасности</span></li>
+        <li class="plan__item" data-in="text"><span class="plan__when">9⁠–⁠12 месяцев</span><span class="plan__what">2⁠–⁠3 платных пилота и подготовка серии</span></li>
+      </ol>
+
+      <div class="round__bottom">
+        <div class="round__result" data-in="text">
+          <p class="label">Результат через 12 месяцев</p>
+          <p class="round__result-text">Два испытанных шкафа, рабочее приложение, данные пилотов, платные внедрения и смета малой серии.</p>
+        </div>
+        <div class="round__team" data-in="text">
+          <p class="label">Команда</p>
+          <p class="round__team-text">Два основателя из МГСУ и внешние эксперты по автоматике, гидравлике и работе с 230 В. Имена и роли — на встрече.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec contact theme-dark" id="contact" data-block="12-связь" data-loud="средний">
+    <div class="wrap contact__in">
+      <div class="contact__intro">
+        <h2 class="contact__title" data-in="text">Обсудим участие в раунде или пилоте</h2>
+        <p class="contact__text" data-in="text">Инвестору покажем инженерный отчёт по контуру 230 В, смету и стратегию выхода на рынок; условия входа обсуждаем на встрече. Девелоперу, управляющей компании или интегратору — расскажем, как попасть в число 2⁠–⁠3 пилотных объектов.</p>
+        <a class="contact__doc" href="assets/docs/PANORAMA_comparison_report.pdf" download data-in="text">
+          <span class="contact__doc-name">Аналитический отчёт PANORAMA</span>
+          <span class="contact__doc-meta">PDF · 260 КБ · 11 страниц · 14.08.2026</span>
+        </a>
+      </div>
+      <form class="form" id="contact-form" novalidate data-in="text">
+        <fieldset class="form__roles">
+          <legend class="form__label">Кто вы</legend>
+          <div class="form__radio-grid">
+            <label class="form__radio-card"><input type="radio" name="role" value="Инвестор" checked><span>Инвестор</span></label>
+            <label class="form__radio-card"><input type="radio" name="role" value="Девелопер"><span>Девелопер</span></label>
+            <label class="form__radio-card"><input type="radio" name="role" value="Управляющая компания"><span>Управляющая компания</span></label>
+            <label class="form__radio-card"><input type="radio" name="role" value="Интегратор"><span>Интегратор</span></label>
+            <label class="form__radio-card"><input type="radio" name="role" value="Другое"><span>Другое</span></label>
+          </div>
+        </fieldset>
+        <div class="form__row">
+          <div class="form__field">
+            <label class="form__label" for="f-name">Имя</label>
+            <input class="form__input" id="f-name" name="name" type="text" autocomplete="name" required minlength="2" placeholder="Как к вам обращаться">
+            <p class="form__error" id="f-name-err" aria-live="polite"></p>
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="f-org">Организация</label>
+            <input class="form__input" id="f-org" name="org" type="text" autocomplete="organization" placeholder="Необязательно">
+          </div>
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="f-contact">Почта или телефон</label>
+          <input class="form__input" id="f-contact" name="contact" type="text" autocomplete="email" required placeholder="name@company.ru или +7 …">
+          <p class="form__error" id="f-contact-err" aria-live="polite"></p>
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="f-msg">Комментарий</label>
+          <textarea class="form__input form__textarea" id="f-msg" name="message" rows="3" placeholder="Что важно обсудить"></textarea>
+        </div>
+        <label class="form__check"><input type="checkbox" name="consent" id="f-consent" required><span>Даю согласие на обработку данных для ответа на заявку</span></label>
+        <p class="form__error form__error--check" id="f-consent-err" aria-live="polite"></p>
+        <div class="form__actions">
+          <button class="pill pill--light form__submit" type="submit">Отправить заявку</button>
+          <p class="form__hint">Заявка откроется в почтовом клиенте</p>
+        </div>
+        <div class="form__success" role="status" hidden>
+          <p class="form__success-title">Заявка собрана</p>
+          <p class="form__success-text">Письмо открыто в почтовом клиенте — осталось нажать «Отправить». Если клиент не открылся, напишите на <a class="form__mail" href="#contact" data-mail></a> — текст заявки можно скопировать.</p>
+          <button class="pill pill--glass form__copy" type="button" data-copy>Скопировать заявку</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot theme-dark">
+  <nav class="foot__nav" aria-label="Ещё раз о главном">
+    <a class="foot__btn" href="#system"><span class="foot__btn-bg" aria-hidden="true"></span><span class="foot__btn-label">Как это работает</span><span class="foot__arrows" aria-hidden="true"><svg class="foot__arrow foot__arrow--current" viewBox="0 0 23 32"><path d="M2 16h17M12 8l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3"/></svg><svg class="foot__arrow foot__arrow--next" viewBox="0 0 23 32"><path d="M2 16h17M12 8l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3"/></svg></span></a>
+    <a class="foot__btn" href="#economy"><span class="foot__btn-bg" aria-hidden="true"></span><span class="foot__btn-label">Цена и конкуренты</span><span class="foot__arrows" aria-hidden="true"><svg class="foot__arrow foot__arrow--current" viewBox="0 0 23 32"><path d="M2 16h17M12 8l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3"/></svg><svg class="foot__arrow foot__arrow--next" viewBox="0 0 23 32"><path d="M2 16h17M12 8l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3"/></svg></span></a>
+    <a class="foot__btn" href="#contact"><span class="foot__btn-bg" aria-hidden="true"></span><span class="foot__btn-label">Обсудить участие</span><span class="foot__arrows" aria-hidden="true"><svg class="foot__arrow foot__arrow--current" viewBox="0 0 23 32"><path d="M2 16h17M12 8l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3"/></svg><svg class="foot__arrow foot__arrow--next" viewBox="0 0 23 32"><path d="M2 16h17M12 8l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3"/></svg></span></a>
+  </nav>
+  <div class="foot__bottom">
+    <p class="foot__word" aria-label="PANORAMA"><span aria-hidden="true">P</span><span aria-hidden="true">A</span><span aria-hidden="true">N</span><span aria-hidden="true">O</span><span aria-hidden="true">R</span><span aria-hidden="true">A</span><span aria-hidden="true">M</span><span aria-hidden="true">A</span></p>
+    <div class="foot__meta">
+      <p class="foot__copy">© 2026 PANORAMA Development · Москва</p>
+      <p class="foot__status">Визуализации ЖК «Life Варшавская» и генплан — проектные материалы, объект выбран как типовая пилотная площадка. Рендеры шкафа, разреза и приложения — концепты PANORAMA. Цены конкурентов — розница РФ на 18.09.2026.</p>
+      <a class="foot__link" href="assets/docs/PANORAMA_comparison_report.pdf" download>Аналитический отчёт, PDF</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,170 @@
+/* ПЛИТА — сброс и сантехника. Облика здесь нет: каждое значение кожи — var() из tokens.css.
+   Файл общий для всех сборок: блоки в него не дописываются (их место — sections.css).
+   У каждой группы правил — грабля, которую она закрывает. */
+
+/* ── Сброс ── */
+*, *::before, *::after { box-sizing: border-box; }
+/* авторский display (img{display:block}, .field{display:grid}, .menu{display:flex}) перебивает UA-правило hidden — три сборки подряд */
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: auto; }
+body {
+  margin: 0;
+  background-color: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--f-text);
+  font-weight: var(--fw-text);
+  font-size: var(--fs-5);
+  line-height: var(--lh-5);
+  letter-spacing: var(--ls-5);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* overflow-x на body НЕ ставится: он прячет перелив от проверок, а не чинит его.
+     Режется виновник: .clip на секции с декором, вылезающим за край */
+}
+h1, h2, h3, h4, h5, h6, p, ul, ol, dl, dd, figure, blockquote { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+button { margin: 0; padding: 0; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; cursor: pointer; }
+input, textarea, select { margin: 0; color: inherit; font: inherit; letter-spacing: inherit; }
+p, li, dd, dt, figcaption { overflow-wrap: break-word; }
+/* медиа: блочные и не шире колонки; width и height в атрибутах обязательны — место резервируется до загрузки */
+img, svg, video, canvas, iframe { display: block; max-width: 100%; }
+img, video { height: auto; }
+/* ленты и волны шире окна (svg 300 %) — сброс max-width их душит */
+.free, [data-marquee] img, [data-marquee] svg { max-width: none; }
+/* span-обёртка с размерами без display:block невидима (width/height на inline не работают) */
+.blk { display: block; }
+
+/* ── Типографика: ступень = кегль + интерлиньяж + трекинг ── */
+h1, h2, h3, h4 { font-family: var(--f-display); font-weight: var(--fw-display); }
+h1, .t-1 { font-size: var(--fs-1); line-height: var(--lh-1); letter-spacing: var(--ls-1); }
+h2, .t-2 { font-size: var(--fs-2); line-height: var(--lh-2); letter-spacing: var(--ls-2); }
+h3, .t-3 { font-size: var(--fs-3); line-height: var(--lh-3); letter-spacing: var(--ls-3); }
+h4, .t-4 { font-size: var(--fs-4); line-height: var(--lh-4); letter-spacing: var(--ls-4); }
+.t-5 { font-size: var(--fs-5); line-height: var(--lh-5); letter-spacing: var(--ls-5); }
+.t-6 { font-size: var(--fs-6); line-height: var(--lh-6); letter-spacing: var(--ls-6); }
+.t-7 { font-size: var(--fs-7); line-height: var(--lh-7); letter-spacing: var(--ls-7); }
+.t-display { font-family: var(--f-display); font-weight: var(--fw-display); }
+.t-text { font-family: var(--f-text); font-weight: var(--fw-text); }
+.t-muted { color: var(--c-muted); }
+.num { font-variant-numeric: tabular-nums; } /* счётчик не дёргает соседей шириной цифр */
+
+/* слово не рвётся посередине («Уганд/а») и не переносится; склейки через nbsp — в .nw */
+.wd { display: inline-block; white-space: nowrap; }
+.ch { display: inline-block; }
+.nw { white-space: nowrap; }
+/* строка-маска: запас сверху, иначе overflow режет Й и Ё при line-height < 1 */
+.line { display: block; overflow: hidden; overflow: clip; padding-top: .14em; margin-top: -.14em; }
+.wd--mask { overflow: hidden; overflow: clip; padding-top: .14em; margin-top: -.14em; vertical-align: top; }
+.wd--mask > .wd__in { display: inline-block; }
+
+/* ── Доступность ── */
+.sr-only {
+  position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+:focus-visible { outline: var(--line-bold) solid var(--c-accent-text); outline-offset: var(--line-bold); }
+.on-accent :focus-visible, .on-accent:focus-visible { outline-color: var(--c-on-accent); }
+/* цель якоря получает фокус программно — кольцо вокруг целой секции не нужно */
+[tabindex="-1"]:focus { outline: none; }
+::selection { background-color: var(--c-accent); color: var(--c-on-accent); }
+.skip {
+  position: absolute; z-index: var(--z-skip); inset-block-start: var(--s-2); inset-inline-start: var(--gutter);
+  padding: var(--s-2) var(--s-3);
+  background-color: var(--c-text); color: var(--c-bg);
+  font-size: var(--fs-6); line-height: var(--lh-6);
+  transform: translateY(-300%);
+}
+.skip:focus { transform: none; }
+
+/* ── Контейнер, сетка, ритм ── */
+/* поле страницы держит .wrap через padding-inline; секции — ТОЛЬКО padding-block:
+   шорткат padding: X 0 Y на элементе с .wrap обнуляет поле */
+.wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
+.sec { position: relative; padding-block: var(--sec); }
+.scene { min-height: 100vh; min-height: 100svh; }
+/* колонки minmax(0,1fr): обычный 1fr распирается min-content (цена, длинное слово, лента).
+   Блок занимает доли: .x { --col: span 6 } или { --col: 3 / span 8 }; без --col — вся ширина */
+.grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); }
+.grid > * { grid-column: var(--col, 1 / -1); min-width: 0; }
+@media (max-width: 767px) {
+  /* span N из десктопа в одной колонке рождает неявную вторую, соседи схлопываются в полоску */
+  .grid { grid-template-columns: repeat(var(--cols-m, 1), minmax(0, 1fr)); }
+  .grid > * { grid-column: var(--col-m, auto); }
+}
+/* вторая тема: роли переопределены в tokens.css, область красится ими же */
+.theme-dark, .theme-light { background-color: var(--c-bg); color: var(--c-text); }
+
+/* ── Пины, слайдеры, ленты ── */
+/* clip, не hidden: hidden создаёт скролл-контейнер, Tab на уехавший элемент прокручивает сам бокс навсегда */
+.clip, [data-pin], [data-slider], [data-marquee] { overflow: hidden; overflow: clip; }
+/* пин во весь экран — только когда core.js поставил .is-pinned (окно выше 780px, движение разрешено);
+   на низком ноутбуке секция идёт обычным потоком и ничего не обрезает */
+[data-pin].is-pinned { height: 100vh; height: 100svh; }
+[data-marquee] > * { display: flex; width: max-content; }
+[data-marquee] > * > * { flex: none; }
+
+/* ── Слои: шапка выше меню ── */
+[data-head] { position: relative; z-index: var(--z-head); }
+[data-overlay] {
+  position: fixed; inset: 0; z-index: var(--z-menu);
+  overflow-y: auto; overscroll-behavior: contain;
+  background-color: var(--c-bg); color: var(--c-text);
+}
+[data-overlay="modal"] { z-index: var(--z-modal); }
+/* порог схлопывания меню в бургер — подобрать по ширине пунктов; наезд на 1024–1200 ловит kit/check.mjs */
+[data-burger] { display: none; min-width: var(--tap); min-height: var(--tap); }
+@media (max-width: 1023px) {
+  [data-nav] { display: none; }
+  [data-burger] { display: inline-flex; align-items: center; justify-content: center; }
+}
+
+/* ── Компоненты шва: одни на весь сайт, блоки вставляют их, а не приносят свои ── */
+/* шапка секции: ярлык + заголовок; раскладку (сверху или в колонках сетки) задаёт стиль-донор в sections.css */
+.sec-head { display: grid; gap: var(--s-2); margin-block-end: var(--s-5); }
+.label {
+  font-family: var(--f-text); font-weight: var(--fw-text);
+  font-size: var(--fs-6); line-height: var(--lh-6); letter-spacing: var(--ls-6);
+  text-transform: var(--tt-label); color: var(--c-muted);
+}
+.caption {
+  font-family: var(--f-text); font-weight: var(--fw-text);
+  font-size: var(--fs-7); line-height: var(--lh-7); letter-spacing: var(--ls-7);
+  color: var(--c-muted);
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+  min-height: var(--tap); padding: var(--s-2) var(--s-4);
+  border: var(--line) solid transparent; border-radius: var(--r-s);
+  background-color: var(--c-accent); color: var(--c-on-accent);
+  font-family: var(--f-text); font-weight: var(--fw-text);
+  font-size: var(--fs-6); line-height: var(--lh-6); letter-spacing: var(--ls-6);
+  text-transform: var(--tt-label); white-space: nowrap;
+  transition: background-color var(--d-1) var(--e-out), color var(--d-1) var(--e-out), border-color var(--d-1) var(--e-out);
+}
+.btn--line { border-color: currentColor; background-color: transparent; color: var(--c-text); }
+/* ховер кнопки — от стиль-донора, в sections.css; JS-появление чистит за собой transform (clearProps), чтобы ховер жил */
+
+/* ── Появление: оболочка. Цифры (сдвиг, stagger, линия срабатывания) — рецепт в main.js от стиль-донора,
+   длительность и кривая — токены. Три рода: data-in="text" | "media" | "line".
+   Скрыто только когда есть JS (html.js), движение разрешено и ядро не ушло в статику (html.is-static).
+   Ждущий элемент — только opacity + visibility, БЕЗ transform: сдвинутый ждущий элемент
+   Chrome перерисовывает при каждой прокрутке; сдвиг ставит reveal() в момент старта. ── */
+@media (prefers-reduced-motion: no-preference) {
+  html.js:not(.is-static) [data-in]:not(.is-in) { opacity: 0; visibility: hidden; }
+}
+/* Свои стартовые состояния подписных блоков пишутся в sections.css ТАК ЖЕ:
+   внутри @media (prefers-reduced-motion: no-preference) и под html.js:not(.is-static).
+   Без JS и при reduced-motion весь текст, цены и кнопки видны, порядок тот же. */
+
+/* ── Без движения: декоративное глушится, контент гарантированно виден ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: var(--d-0) !important; animation-delay: 0s !important; animation-iteration-count: 1 !important;
+    transition-duration: var(--d-0) !important; transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  [data-in], .wd, .ch, .wd__in, .line > * { opacity: 1 !important; visibility: visible !important; }
+  /* кусочки сплита раскладочных трансформов не несут — сбрасываем всё, что могло застрять */
+  .wd, .ch, .wd__in, .line > * { transform: none !important; translate: none !important; clip-path: none !important; }
+}
